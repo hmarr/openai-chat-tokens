@@ -128,11 +128,11 @@ const TEST_CASES: Example[] = [
 ];
 
 const validateAll = false;
-const openai = new OpenAI();
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = ((validateAll || example.validate) ? test : test.skip)
   validateTest("match openai", async () => {
+    const openai = new OpenAI();
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: example.messages,

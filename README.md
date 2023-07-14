@@ -1,5 +1,8 @@
 # openai-chat-tokens
 
+[![npm version](https://badge.fury.io/js/openai-chat-tokens.svg)](https://badge.fury.io/js/openai-chat-tokens)
+[![CI](https://github.com/hmarr/openai-chat-tokens/actions/workflows/ci.yml/badge.svg)](https://github.com/hmarr/openai-chat-tokens/actions/workflows/ci.yml)
+
 A TypeScript / JavaScript library for estimating the number of tokens an OpenAI chat completion request will use.
 
 Estimating token usage for chat completions isn't quite as easy as it sounds.

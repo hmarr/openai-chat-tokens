@@ -1,6 +1,5 @@
 import OpenAI from "openai";
-import { Tiktoken } from "tiktoken";
-import cl100k_base from "tiktoken/encoders/cl100k_base.json";
+import { getEncoding } from "js-tiktoken";
 import { FunctionDef, formatFunctionDefinitions } from "./functions";
 
 type Message = OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStreaming.Message;
@@ -28,14 +27,8 @@ export function promptTokensEstimate({ messages, functions }: { messages: Messag
  * @returns The number of tokens in the string
  */
 export function stringTokens(s: string): number {
-  const encoding = new Tiktoken(
-    cl100k_base.bpe_ranks,
-    cl100k_base.special_tokens,
-    cl100k_base.pat_str
-  );
-  const tokens = encoding.encode(s).length;
-  encoding.free();
-  return tokens;
+  const encoding = getEncoding("cl100k_base");
+  return encoding.encode(s).length;
 }
 
 /**

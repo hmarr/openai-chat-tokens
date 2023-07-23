@@ -125,13 +125,25 @@ const TEST_CASES: Example[] = [
     ],
     tokens: 24,
   },
+  {
+    messages: [
+      { role: "assistant", content: "", function_call: { name: "do_stuff", arguments: `{"foo": "bar", "baz": 1.5}` } },
+    ],
+    tokens: 26,
+  },
+  {
+    messages: [
+      { role: "assistant", content: "", function_call: { name: "do_stuff", arguments: `{"foo":"bar", "baz":\n\n 1.5}` } },
+    ],
+    tokens: 25,
+  }
 ];
 
 const validateAll = false;
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = ((validateAll || example.validate) ? test : test.skip)
-  validateTest("match openai", async () => {
+  validateTest("test data matches openai", async () => {
     const openai = new OpenAI();
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
@@ -142,7 +154,7 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
     expect(response.usage?.prompt_tokens).toBe(example.tokens);
   });
 
-  test("match estimate", async () => {
+  test("estimate is correct", async () => {
     expect(promptTokensEstimate({ messages: example.messages, functions: example.functions })).toBe(example.tokens);
   });
 })

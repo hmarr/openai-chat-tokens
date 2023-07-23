@@ -42,11 +42,20 @@ export function stringTokens(s: string): number {
  * @returns An estimate for the number of tokens the message will use
  */
 export function messageTokensEstimate(message: Message): number {
-  const components = [message.role, message.content, message.name].filter((v): v is string => !!v);
+  const components = [
+    message.role,
+    message.content,
+    message.name,
+    message.function_call?.name,
+    message.function_call?.arguments
+  ].filter((v): v is string => !!v);
   let tokens = components.map(stringTokens).reduce((a, b) => a + b, 0);
   tokens += 3; // Add three per message
   if (message.name) {
     tokens -= 1; // Subtract one if there's a function name
+  }
+  if (message.function_call) {
+    tokens += 3;
   }
   return tokens;
 }

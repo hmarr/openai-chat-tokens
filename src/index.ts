@@ -20,6 +20,12 @@ export function promptTokensEstimate({ messages, functions }: { messages: Messag
   if (functions) {
     tokens += functionsTokensEstimate(functions as any as FunctionDef[]);
   }
+
+  // If there's a system message _and_ functions are present, subtract three tokens
+  if (functions && messages.find(m => m.role === "system")) {
+    tokens -= 3;
+  }
+
   return tokens;
 }
 

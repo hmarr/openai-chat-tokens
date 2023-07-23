@@ -148,6 +148,19 @@ const TEST_CASES: Example[] = [
       { role: "assistant", content: "", function_call: { name: "do_stuff", arguments: `{"foo":"bar", "baz":\n\n 1.5}` } },
     ],
     tokens: 25,
+  },
+  {
+    messages: [
+      { "role": "system", "content": "Hello" },
+      { "role": "user", "content": "Hi there" },
+    ],
+    functions: [
+      {
+        "name": "do_stuff",
+        "parameters": { "type": "object", "properties": {} }
+      }
+    ],
+    tokens: 35,
   }
 ];
 

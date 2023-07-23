@@ -15,15 +15,30 @@ let encoder: Tiktoken | undefined;
  * @returns An estimate for the number of tokens the prompt will use
  */
 export function promptTokensEstimate({ messages, functions }: { messages: Message[], functions?: Function[] }): number {
-  let tokens = messages.map(messageTokensEstimate).reduce((a, b) => a + b, 0);
-  tokens += 3; // Add three per completion
+  // It appears that if functions are present, the first system message is padded with a trailing newline. This
+  // was inferred by trying lots of combinations of messages and functions and seeing what the token counts were.
+  let paddedSystem = false;
+  let tokens = messages.map(m => {
+    if (m.role === "system" && functions && !paddedSystem) {
+      m = { ...m, content: m.content + "\n" }
+      paddedSystem = true;
+    }
+    return messageTokensEstimate(m);
+  }).reduce((a, b) => a + b, 0);
+
+  // Each completion (vs message) seems to carry a 3-token overhead
+  tokens += 3;
+
+  // If there are functions, add the function definitions as they count towards token usage
   if (functions) {
     tokens += functionsTokensEstimate(functions as any as FunctionDef[]);
   }
 
-  // If there's a system message _and_ functions are present, subtract three tokens
+  // If there's a system message _and_ functions are present, subtract four tokens. I assume this is because
+  // functions typically add a system message, but reuse the first one if it's already there. This offsets
+  // the extra 9 tokens added by the function definitions.
   if (functions && messages.find(m => m.role === "system")) {
-    tokens -= 3;
+    tokens -= 4;
   }
 
   return tokens;

@@ -10,6 +10,26 @@ type Example = {
   validate?: boolean
 };
 
+const r: OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStreaming = {
+  "model": "gpt-3.5-turbo",
+  "temperature": 0,
+  "functions": [
+    {
+      "name": "do_stuff",
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
+    }
+  ],
+  "messages": [
+    {
+      "role": "system",
+      "content": "hello:"
+    },
+  ]
+};
+
 const TEST_CASES: Example[] = [
   {
     messages: [
@@ -22,6 +42,18 @@ const TEST_CASES: Example[] = [
       { role: "user", content: "hello world" }
     ],
     tokens: 9
+  },
+  {
+    messages: [
+      { role: "system", content: "hello" }
+    ],
+    tokens: 8,
+  },
+  {
+    messages: [
+      { role: "system", content: "hello:" }
+    ],
+    tokens: 9,
   },
   {
     messages: [
@@ -161,10 +193,32 @@ const TEST_CASES: Example[] = [
       }
     ],
     tokens: 35,
-  }
+  },
+  {
+    messages: [
+      { "role": "system", "content": "Hello:" },
+      { "role": "user", "content": "Hi there" },
+    ],
+    functions: [
+      { "name": "do_stuff", "parameters": { "type": "object", "properties": {} } }
+    ],
+    tokens: 35,
+  },
+  {
+    messages: [
+      { "role": "system", "content": "Hello:" },
+      { "role": "system", "content": "Hello" },
+      { "role": "user", "content": "Hi there" },
+    ],
+    functions: [
+      { "name": "do_stuff", "parameters": { "type": "object", "properties": {} } }
+    ],
+    tokens: 40,
+  },
 ];
 
 const validateAll = false;
+const openAITimeout = 10000;
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = ((validateAll || example.validate) ? test : test.skip)
@@ -174,10 +228,10 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
       model: "gpt-3.5-turbo",
       messages: example.messages,
       functions: example.functions as any,
-      max_tokens: 1,
+      max_tokens: 10,
     });
     expect(response.usage?.prompt_tokens).toBe(example.tokens);
-  });
+  }, openAITimeout);
 
   test("estimate is correct", async () => {
     expect(promptTokensEstimate({ messages: example.messages, functions: example.functions })).toBe(example.tokens);

@@ -38,6 +38,18 @@ const TEST_CASES: Example[] = [
     functions: [
       {
         name: "foo",
+        parameters: { type: "object", properties: {} }
+      }
+    ],
+    tokens: 31
+  },
+  {
+    messages: [
+      { role: "user", content: "hello" }
+    ],
+    functions: [
+      {
+        name: "foo",
         description: "Do a foo",
         parameters: { type: "object", properties: {} }
       }

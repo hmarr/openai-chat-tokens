@@ -38,7 +38,9 @@ type Prop = {
 export function formatFunctionDefinitions(functions: FunctionDef[]) {
   const lines = ["namespace functions {", ""];
   for (const f of functions) {
-    lines.push(`// ${f.description}`);
+    if (f.description) {
+      lines.push(`// ${f.description}`);
+    }
     if (Object.keys(f.parameters.properties ?? {}).length > 0) {
       lines.push(`type ${f.name} = (_: {`);
       lines.push(formatObjectProperties(f.parameters, 0));

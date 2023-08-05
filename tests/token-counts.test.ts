@@ -215,6 +215,52 @@ const TEST_CASES: Example[] = [
     ],
     tokens: 40,
   },
+  {
+    messages: [{ role: 'user', content: 'hello' }],
+    validate: true,
+    functions: [
+      {
+        name: 'get_recipe',
+        parameters: {
+          type: 'object',
+          required: ['ingredients', 'instructions', 'time_to_cook'],
+          properties: {
+            ingredients: {
+              type: 'array',
+              items: {
+                type: 'object',
+                required: ['name', 'unit', 'amount'],
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                  unit: {
+                    enum: ['grams', 'ml', 'cups', 'pieces', 'teaspoons'],
+                    type: 'string',
+                  },
+                  amount: {
+                    type: 'number',
+                  },
+                },
+              },
+            },
+            instructions: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+              description: 'Steps to prepare the recipe (no numbering)',
+            },
+            time_to_cook: {
+              type: 'number',
+              description: 'Total time to prepare the recipe in minutes',
+            },
+          },
+        },
+      },
+    ],
+    tokens: 106,
+  },
 ];
 
 const validateAll = false;

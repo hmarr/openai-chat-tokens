@@ -31,6 +31,10 @@ type Prop = {
     }
     | { type: "boolean" }
     | { type: "null" }
+    | {
+        type: "array";
+        items?: Prop;
+      }
   );
 
 // When OpenAI use functions in the prompt, they format them as TypeScript definitions rather than OpenAPI JSON schemas.
@@ -94,5 +98,10 @@ function formatType(param: Prop, indent: number): string {
       return "null";
     case "object":
       return ["{", formatObjectProperties(param, indent + 2), "}"].join("\n");
+    case "array":
+      if (param.items) {
+        return `${formatType(param.items, indent)}[]`;
+      }
+      return "any[]";
   }
 }

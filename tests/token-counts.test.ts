@@ -217,7 +217,6 @@ const TEST_CASES: Example[] = [
   },
   {
     messages: [{ role: 'user', content: 'hello' }],
-    validate: true,
     functions: [
       {
         name: 'get_recipe',

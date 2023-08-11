@@ -73,7 +73,10 @@ export function messageTokensEstimate(message: Message): number {
   let tokens = components.map(stringTokens).reduce((a, b) => a + b, 0);
   tokens += 3; // Add three per message
   if (message.name) {
-    tokens -= 1; // Subtract one if there's a function name
+    tokens += 1;
+  }
+  if (message.role === "function") {
+    tokens -= 2;
   }
   if (message.function_call) {
     tokens += 3;

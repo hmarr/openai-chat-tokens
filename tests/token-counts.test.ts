@@ -31,6 +31,70 @@ const r: OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStream
 };
 
 const TEST_CASES: Example[] = [
+  // these match https://github.com/openai/openai-cookbook/blob/main/examples/How_to_count_tokens_with_tiktoken.ipynb
+  {
+    messages: [
+      {
+        role: "system",
+        content:
+          "You are a helpful, pattern-following assistant that translates corporate jargon into plain English.",
+      },
+    ],
+    tokens: 25,
+  },
+  {
+    messages: [
+      {
+        role: "system",
+        name: "example_user",
+        content: "New synergies will help drive top-line growth.",
+      },
+    ],
+    tokens: 20,
+  },
+  {
+    messages: [
+      {
+        role: "system",
+        name: "example_assistant",
+        content: "Things working well together will increase revenue.",
+      },
+    ],
+    tokens: 19,
+  },
+  {
+    messages: [
+      {
+        role: "system",
+        name: "example_user",
+        content:
+          "Let's circle back when we have more bandwidth to touch base on opportunities for increased leverage.",
+      },
+    ],
+    tokens: 28,
+  },
+  {
+    messages: [
+      {
+        role: "system",
+        name: "example_assistant",
+        content:
+          "Let's talk later when we're less busy about how to do better.",
+      },
+    ],
+    tokens: 26,
+  },
+  {
+    messages: [
+      {
+        role: "user",
+        content:
+          "This late pivot means we don't have time to boil the ocean for the client deliverable.",
+      },
+    ],
+    tokens: 26,
+  },
+  // these are all random test cases below
   {
     messages: [
       { role: "user", content: "hello" }

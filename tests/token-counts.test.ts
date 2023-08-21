@@ -355,32 +355,6 @@ const TEST_CASES: Example[] = [
     functions: [
       {
         name: 'function',
-        description: 'description',
-        parameters: {
-          type: 'object',
-          properties: {
-            quality: {
-              type: 'object',
-              properties: {
-                pros: {
-                  type: 'array',
-                  items: {
-                    type: 'string',
-                  },
-                  description: 'Write 3 points why this text is well written',
-                }
-              },
-            }
-          },
-        }
-      }],
-    tokens: 46,
-  },
-  {
-    messages: [{ role: 'user', content: 'hello' }],
-    functions: [
-      {
-        name: 'function',
         description: 'desctiption1',
         parameters: {
           type: 'object',

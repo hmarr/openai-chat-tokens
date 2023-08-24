@@ -304,6 +304,83 @@ const TEST_CASES: Example[] = [
     ],
     tokens: 106,
   },
+  {
+    messages: [{ role: 'user', content: 'hello' }],
+    functions: [
+      {
+        name: 'function',
+        description: 'description',
+        parameters: {
+          type: 'object',
+          properties: {
+            quality: {
+              type: 'object',
+              properties: {
+                pros: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
+                  description: 'Write 3 points why this text is well written',
+                }
+              },
+            }
+          },
+        }
+      }],
+    tokens: 46,
+  },
+  {
+    messages: [{ role: 'user', content: 'hello' }],
+    functions: [
+      {
+        name: 'function',
+        description: 'desctiption1',
+        parameters: {
+          type: 'object',
+          description: 'desctiption2',
+          properties: {
+            mainField: {
+              type: 'string',
+              description: 'description3',
+            },
+            'field number one': {
+              type: 'object',
+              description: 'description4',
+              properties: {
+                yesNoField: {
+                  type: 'string',
+                  description: 'description5',
+                  enum: [
+                    'Yes',
+                    'No',
+                  ],
+                },
+                howIsInteresting: {
+                  type: 'string',
+                  description: 'description6',
+                },
+                scoreInteresting: {
+                  type: 'number',
+                  description: 'description7',
+                },
+                isInteresting: {
+                  type: 'string',
+                  description: 'description8',
+                  enum: [
+                    'Yes',
+                    'No',
+                  ],
+                },
+              },
+            },
+          },
+
+        }
+      }
+    ],
+    tokens: 96,
+  }
 ];
 
 const validateAll = false;

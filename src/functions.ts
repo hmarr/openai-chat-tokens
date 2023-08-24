@@ -66,7 +66,7 @@ export function formatFunctionDefinitions(functions: FunctionDef[]) {
 function formatObjectProperties(obj: ObjectProp, indent: number): string {
   const lines = [];
   for (const [name, param] of Object.entries(obj.properties ?? {})) {
-    if (param.description) {
+    if (param.description && indent < 2) {
       lines.push(`// ${param.description}`);
     }
     if (obj.required?.includes(name)) {

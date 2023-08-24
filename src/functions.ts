@@ -22,24 +22,24 @@ interface ObjectProp {
 type Prop = {
   description?: string;
 } & (
-    | ObjectProp
-    | {
+  | ObjectProp
+  | {
       type: "string";
       enum?: string[];
     }
-    | {
+  | {
       type: "number" | "integer";
       minimum?: number;
       maximum?: number;
       enum?: number[];
     }
-    | { type: "boolean" }
-    | { type: "null" }
-    | {
+  | { type: "boolean" }
+  | { type: "null" }
+  | {
       type: "array";
       items?: Prop;
     }
-  );
+);
 
 // When OpenAI use functions in the prompt, they format them as TypeScript definitions rather than OpenAPI JSON schemas.
 // This function converts the JSON schemas into TypeScript definitions.
@@ -75,7 +75,7 @@ function formatObjectProperties(obj: ObjectProp, indent: number): string {
       lines.push(`${name}?: ${formatType(param, indent)},`);
     }
   }
-  return lines.map(line => ' '.repeat(indent) + line).join("\n");
+  return lines.map((line) => " ".repeat(indent) + line).join("\n");
 }
 
 // Format a single property type

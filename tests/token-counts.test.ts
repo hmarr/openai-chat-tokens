@@ -7,7 +7,7 @@ type Example = {
   messages: Message[];
   functions?: Function[];
   tokens: number;
-  validate?: boolean
+  validate?: boolean;
 };
 
 const TEST_CASES: Example[] = [
@@ -76,27 +76,19 @@ const TEST_CASES: Example[] = [
   },
   // these are all random test cases below
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
-    tokens: 8
-  },
-  {
-    messages: [
-      { role: "user", content: "hello world" }
-    ],
-    tokens: 9
-  },
-  {
-    messages: [
-      { role: "system", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     tokens: 8,
   },
   {
-    messages: [
-      { role: "system", content: "hello:" }
-    ],
+    messages: [{ role: "user", content: "hello world" }],
+    tokens: 9,
+  },
+  {
+    messages: [{ role: "system", content: "hello" }],
+    tokens: 8,
+  },
+  {
+    messages: [{ role: "system", content: "hello:" }],
     tokens: 9,
   },
   {
@@ -105,37 +97,31 @@ const TEST_CASES: Example[] = [
       { role: "user", content: "hello robot" },
       { role: "assistant", content: "hello world" },
     ],
-    tokens: 27
+    tokens: 27,
   },
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
         name: "foo",
-        parameters: { type: "object", properties: {} }
-      }
+        parameters: { type: "object", properties: {} },
+      },
     ],
-    tokens: 31
+    tokens: 31,
   },
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
         name: "foo",
         description: "Do a foo",
-        parameters: { type: "object", properties: {} }
-      }
+        parameters: { type: "object", properties: {} },
+      },
     ],
-    tokens: 36
+    tokens: 36,
   },
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
         name: "bing_bong",
@@ -144,16 +130,14 @@ const TEST_CASES: Example[] = [
           type: "object",
           properties: {
             foo: { type: "string" },
-          }
-        }
-      }
+          },
+        },
+      },
     ],
-    tokens: 49
+    tokens: 49,
   },
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
         name: "bing_bong",
@@ -163,16 +147,14 @@ const TEST_CASES: Example[] = [
           properties: {
             foo: { type: "string" },
             bar: { type: "number", description: "A number" },
-          }
-        }
-      }
+          },
+        },
+      },
     ],
     tokens: 57,
   },
   {
-    messages: [
-      { role: "user", content: "hello" }
-    ],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
         name: "bing_bong",
@@ -184,12 +166,12 @@ const TEST_CASES: Example[] = [
               type: "object",
               properties: {
                 bar: { type: "string", enum: ["a", "b", "c"] },
-                baz: { type: "boolean" }
-              }
+                baz: { type: "boolean" },
+              },
             },
-          }
-        }
-      }
+          },
+        },
+      },
     ],
     tokens: 68,
   },
@@ -203,100 +185,122 @@ const TEST_CASES: Example[] = [
   {
     messages: [
       { role: "user", content: "hello world" },
-      { role: "function", name: "do_stuff", content: `{"foo": "bar", "baz": 1.5}` },
+      {
+        role: "function",
+        name: "do_stuff",
+        content: `{"foo": "bar", "baz": 1.5}`,
+      },
     ],
     tokens: 28,
   },
   {
     messages: [
-      { role: "function", name: "dance_the_tango", content: `{"a": { "b" : { "c": false}}}` },
+      {
+        role: "function",
+        name: "dance_the_tango",
+        content: `{"a": { "b" : { "c": false}}}`,
+      },
     ],
     tokens: 24,
   },
   {
     messages: [
-      { role: "assistant", content: "", function_call: { name: "do_stuff", arguments: `{"foo": "bar", "baz": 1.5}` } },
+      {
+        role: "assistant",
+        content: "",
+        function_call: {
+          name: "do_stuff",
+          arguments: `{"foo": "bar", "baz": 1.5}`,
+        },
+      },
     ],
     tokens: 26,
   },
   {
     messages: [
-      { role: "assistant", content: "", function_call: { name: "do_stuff", arguments: `{"foo":"bar", "baz":\n\n 1.5}` } },
+      {
+        role: "assistant",
+        content: "",
+        function_call: {
+          name: "do_stuff",
+          arguments: `{"foo":"bar", "baz":\n\n 1.5}`,
+        },
+      },
     ],
     tokens: 25,
   },
   {
     messages: [
-      { "role": "system", "content": "Hello" },
-      { "role": "user", "content": "Hi there" },
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
     ],
     functions: [
       {
-        "name": "do_stuff",
-        "parameters": { "type": "object", "properties": {} }
-      }
+        name: "do_stuff",
+        parameters: { type: "object", properties: {} },
+      },
     ],
     tokens: 35,
   },
   {
     messages: [
-      { "role": "system", "content": "Hello:" },
-      { "role": "user", "content": "Hi there" },
+      { role: "system", content: "Hello:" },
+      { role: "user", content: "Hi there" },
     ],
     functions: [
-      { "name": "do_stuff", "parameters": { "type": "object", "properties": {} } }
+      { name: "do_stuff", parameters: { type: "object", properties: {} } },
     ],
     tokens: 35,
   },
   {
     messages: [
-      { "role": "system", "content": "Hello:" },
-      { "role": "system", "content": "Hello" },
-      { "role": "user", "content": "Hi there" },
+      { role: "system", content: "Hello:" },
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
     ],
     functions: [
-      { "name": "do_stuff", "parameters": { "type": "object", "properties": {} } }
+      { name: "do_stuff", parameters: { type: "object", properties: {} } },
     ],
     tokens: 40,
   },
   {
-    messages: [{ role: 'user', content: 'hello' }],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
-        name: 'get_recipe',
+        name: "get_recipe",
         parameters: {
-          type: 'object',
-          required: ['ingredients', 'instructions', 'time_to_cook'],
+          type: "object",
+          required: ["ingredients", "instructions", "time_to_cook"],
           properties: {
             ingredients: {
-              type: 'array',
+              type: "array",
               items: {
-                type: 'object',
-                required: ['name', 'unit', 'amount'],
+                type: "object",
+                required: ["name", "unit", "amount"],
                 properties: {
                   name: {
-                    type: 'string',
+                    type: "string",
                   },
                   unit: {
-                    enum: ['grams', 'ml', 'cups', 'pieces', 'teaspoons'],
-                    type: 'string',
+                    enum: ["grams", "ml", "cups", "pieces", "teaspoons"],
+                    type: "string",
                   },
                   amount: {
-                    type: 'number',
+                    type: "number",
                   },
                 },
               },
             },
             instructions: {
-              type: 'array',
+              type: "array",
               items: {
-                type: 'string',
+                type: "string",
               },
-              description: 'Steps to prepare the recipe (no numbering)',
+              description: "Steps to prepare the recipe (no numbering)",
             },
             time_to_cook: {
-              type: 'number',
-              description: 'Total time to prepare the recipe in minutes',
+              type: "number",
+              description: "Total time to prepare the recipe in minutes",
             },
           },
         },
@@ -305,101 +309,104 @@ const TEST_CASES: Example[] = [
     tokens: 106,
   },
   {
-    messages: [{ role: 'user', content: 'hello' }],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
-        name: 'function',
-        description: 'description',
+        name: "function",
+        description: "description",
         parameters: {
-          type: 'object',
+          type: "object",
           properties: {
             quality: {
-              type: 'object',
+              type: "object",
               properties: {
                 pros: {
-                  type: 'array',
+                  type: "array",
                   items: {
-                    type: 'string',
+                    type: "string",
                   },
-                  description: 'Write 3 points why this text is well written',
-                }
+                  description: "Write 3 points why this text is well written",
+                },
               },
-            }
+            },
           },
-        }
-      }],
+        },
+      },
+    ],
     tokens: 46,
   },
   {
-    messages: [{ role: 'user', content: 'hello' }],
+    messages: [{ role: "user", content: "hello" }],
     functions: [
       {
-        name: 'function',
-        description: 'desctiption1',
+        name: "function",
+        description: "desctiption1",
         parameters: {
-          type: 'object',
-          description: 'desctiption2',
+          type: "object",
+          description: "desctiption2",
           properties: {
             mainField: {
-              type: 'string',
-              description: 'description3',
+              type: "string",
+              description: "description3",
             },
-            'field number one': {
-              type: 'object',
-              description: 'description4',
+            "field number one": {
+              type: "object",
+              description: "description4",
               properties: {
                 yesNoField: {
-                  type: 'string',
-                  description: 'description5',
-                  enum: [
-                    'Yes',
-                    'No',
-                  ],
+                  type: "string",
+                  description: "description5",
+                  enum: ["Yes", "No"],
                 },
                 howIsInteresting: {
-                  type: 'string',
-                  description: 'description6',
+                  type: "string",
+                  description: "description6",
                 },
                 scoreInteresting: {
-                  type: 'number',
-                  description: 'description7',
+                  type: "number",
+                  description: "description7",
                 },
                 isInteresting: {
-                  type: 'string',
-                  description: 'description8',
-                  enum: [
-                    'Yes',
-                    'No',
-                  ],
+                  type: "string",
+                  description: "description8",
+                  enum: ["Yes", "No"],
                 },
               },
             },
           },
-
-        }
-      }
+        },
+      },
     ],
     tokens: 96,
-  }
+  },
 ];
 
 const validateAll = false;
 const openAITimeout = 10000;
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
-  const validateTest = ((validateAll || example.validate) ? test : test.skip)
-  validateTest("test data matches openai", async () => {
-    const openai = new OpenAI();
-    const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: example.messages,
-      functions: example.functions as any,
-      max_tokens: 10,
-    });
-    expect(response.usage?.prompt_tokens).toBe(example.tokens);
-  }, openAITimeout);
+  const validateTest = validateAll || example.validate ? test : test.skip;
+  validateTest(
+    "test data matches openai",
+    async () => {
+      const openai = new OpenAI();
+      const response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: example.messages,
+        functions: example.functions as any,
+        max_tokens: 10,
+      });
+      expect(response.usage?.prompt_tokens).toBe(example.tokens);
+    },
+    openAITimeout,
+  );
 
   test("estimate is correct", async () => {
-    expect(promptTokensEstimate({ messages: example.messages, functions: example.functions })).toBe(example.tokens);
+    expect(
+      promptTokensEstimate({
+        messages: example.messages,
+        functions: example.functions,
+      }),
+    ).toBe(example.tokens);
   });
-})
+});

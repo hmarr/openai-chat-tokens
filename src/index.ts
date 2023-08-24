@@ -14,17 +14,25 @@ let encoder: Tiktoken | undefined;
  * @param {Function[]} prompt.functions OpenAI function definitions
  * @returns An estimate for the number of tokens the prompt will use
  */
-export function promptTokensEstimate({ messages, functions }: { messages: Message[], functions?: Function[] }): number {
+export function promptTokensEstimate({
+  messages,
+  functions,
+}: {
+  messages: Message[];
+  functions?: Function[];
+}): number {
   // It appears that if functions are present, the first system message is padded with a trailing newline. This
   // was inferred by trying lots of combinations of messages and functions and seeing what the token counts were.
   let paddedSystem = false;
-  let tokens = messages.map(m => {
-    if (m.role === "system" && functions && !paddedSystem) {
-      m = { ...m, content: m.content + "\n" }
-      paddedSystem = true;
-    }
-    return messageTokensEstimate(m);
-  }).reduce((a, b) => a + b, 0);
+  let tokens = messages
+    .map((m) => {
+      if (m.role === "system" && functions && !paddedSystem) {
+        m = { ...m, content: m.content + "\n" };
+        paddedSystem = true;
+      }
+      return messageTokensEstimate(m);
+    })
+    .reduce((a, b) => a + b, 0);
 
   // Each completion (vs message) seems to carry a 3-token overhead
   tokens += 3;
@@ -37,7 +45,7 @@ export function promptTokensEstimate({ messages, functions }: { messages: Messag
   // If there's a system message _and_ functions are present, subtract four tokens. I assume this is because
   // functions typically add a system message, but reuse the first one if it's already there. This offsets
   // the extra 9 tokens added by the function definitions.
-  if (functions && messages.find(m => m.role === "system")) {
+  if (functions && messages.find((m) => m.role === "system")) {
     tokens -= 4;
   }
 
@@ -68,7 +76,7 @@ export function messageTokensEstimate(message: Message): number {
     message.content,
     message.name,
     message.function_call?.name,
-    message.function_call?.arguments
+    message.function_call?.arguments,
   ].filter((v): v is string => !!v);
   let tokens = components.map(stringTokens).reduce((a, b) => a + b, 0);
   tokens += 3; // Add three per message
@@ -85,7 +93,7 @@ export function messageTokensEstimate(message: Message): number {
 }
 
 /**
- * Estimate the number of tokens a function definition will use. Note that using the function definition within 
+ * Estimate the number of tokens a function definition will use. Note that using the function definition within
  * a prompt will add extra tokens, so you might want to use `promptTokensEstimate` instead.
  * @param funcs An array of OpenAI function definitions
  * @returns An estimate for the number of tokens the function definitions will use

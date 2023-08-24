@@ -1,7 +1,11 @@
+import OpenAI from "openai";
+
+type OpenAIFunction = OpenAI.Chat.CompletionCreateParams.Function;
+
 // Types representing the OpenAI function definitions. While the OpenAI client library
 // does have types for function definitions, the properties are just Record<string, unknown>,
 // which isn't very useful for type checking this formatting code.
-export interface FunctionDef {
+export interface FunctionDef extends Omit<OpenAIFunction, "parameters"> {
   name: string;
   description?: string;
   parameters: ObjectProp;
@@ -32,9 +36,9 @@ type Prop = {
     | { type: "boolean" }
     | { type: "null" }
     | {
-        type: "array";
-        items?: Prop;
-      }
+      type: "array";
+      items?: Prop;
+    }
   );
 
 // When OpenAI use functions in the prompt, they format them as TypeScript definitions rather than OpenAPI JSON schemas.

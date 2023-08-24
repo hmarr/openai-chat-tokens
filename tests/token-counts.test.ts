@@ -1,33 +1,13 @@
 import OpenAI from "openai";
 import { promptTokensEstimate } from "../src";
 
-type Message = OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStreaming.Message;
-type Function = OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStreaming.Function;
+type Message = OpenAI.Chat.CreateChatCompletionRequestMessage;
+type Function = OpenAI.Chat.CompletionCreateParams.Function;
 type Example = {
   messages: Message[];
   functions?: Function[];
   tokens: number;
   validate?: boolean
-};
-
-const r: OpenAI.Chat.CompletionCreateParams.CreateChatCompletionRequestNonStreaming = {
-  "model": "gpt-3.5-turbo",
-  "temperature": 0,
-  "functions": [
-    {
-      "name": "do_stuff",
-      "parameters": {
-        "type": "object",
-        "properties": {}
-      }
-    }
-  ],
-  "messages": [
-    {
-      "role": "system",
-      "content": "hello:"
-    },
-  ]
 };
 
 const TEST_CASES: Example[] = [

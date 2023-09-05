@@ -56,7 +56,7 @@ export function promptTokensEstimate({
   // If it's a FunctionCall object, add 4 + the number of tokens in the function name.
   // If it's undefined or 'auto', don't add anything.
   if (function_call && function_call !== 'auto') {
-    tokens += function_call === 'none' ? 1 : stringTokens(function_call.name) + 4
+    tokens += function_call === 'none' ? 1 : stringTokens(function_call.name) + 4;
   }
 
   return tokens;

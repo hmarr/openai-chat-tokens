@@ -3,9 +3,11 @@ import { promptTokensEstimate } from "../src";
 
 type Message = OpenAI.Chat.CreateChatCompletionRequestMessage;
 type Function = OpenAI.Chat.CompletionCreateParams.Function;
+type FunctionCall = OpenAI.Chat.CompletionCreateParams.FunctionCallOption;
 type Example = {
   messages: Message[];
   functions?: Function[];
+  function_call?: "none" | "auto" | FunctionCall;
   tokens: number;
   validate?: boolean;
 };
@@ -108,6 +110,39 @@ const TEST_CASES: Example[] = [
       },
     ],
     tokens: 31,
+  },
+  {
+    messages: [{ role: "user", content: "hello" }],
+    functions: [
+      {
+        name: "foo",
+        parameters: { type: "object", properties: {} },
+      },
+    ],
+    function_call: "none",
+    tokens: 32,
+  },
+  {
+    messages: [{ role: "user", content: "hello" }],
+    functions: [
+      {
+        name: "foo",
+        parameters: { type: "object", properties: {} },
+      },
+    ],
+    function_call: "auto",
+    tokens: 31,
+  },
+  {
+    messages: [{ role: "user", content: "hello" }],
+    functions: [
+      {
+        name: "foo",
+        parameters: { type: "object", properties: {} },
+      },
+    ],
+    function_call: { name: "foo" },
+    tokens: 36,
   },
   {
     messages: [{ role: "user", content: "hello" }],
@@ -264,6 +299,31 @@ const TEST_CASES: Example[] = [
     tokens: 40,
   },
   {
+    messages: [
+      { role: "system", content: "Hello:" },
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
+    ],
+    functions: [
+      { name: "do_stuff", parameters: { type: "object", properties: {} } },
+      { name: "do_other_stuff", parameters: { type: "object", properties: {} } },
+    ],
+    tokens: 49,
+  },
+  {
+    messages: [
+      { role: "system", content: "Hello:" },
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
+    ],
+    functions: [
+      { name: "do_stuff", parameters: { type: "object", properties: {} } },
+      { name: "do_other_stuff", parameters: { type: "object", properties: {} } },
+    ],
+    function_call: { name: "do_stuff" },
+    tokens: 55,
+  },
+  {
     messages: [{ role: "user", content: "hello" }],
     functions: [
       {
@@ -394,6 +454,7 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
         model: "gpt-3.5-turbo",
         messages: example.messages,
         functions: example.functions as any,
+        function_call: example.function_call,
         max_tokens: 10,
       });
       expect(response.usage?.prompt_tokens).toBe(example.tokens);
@@ -406,6 +467,7 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
       promptTokensEstimate({
         messages: example.messages,
         functions: example.functions,
+        function_call: example.function_call,
       }),
     ).toBe(example.tokens);
   });

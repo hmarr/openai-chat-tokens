@@ -20,7 +20,7 @@ jobs:
           -H "Content-Type: application/json" \
           --silent | jq -r '.value' > oidc_token
         echo -e "\nOIDC Token (encoded)"
-        cat oidc_token | jq
+        cat oidc_token
         echo -e "\nOIDC Token (decoded)"
         cat oidc_token | jq -R 'split(".") | .[0],.[1] | @base64d | fromjson'
     - uses: actions/checkout@v3

@@ -1,6 +1,6 @@
 {
   "name": "openai-chat-tokens",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Estimate the number of tokens an OpenAI chat completion request will use",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -6,6 +6,12 @@ on:
   pull_request:
 
 jobs:
+  debug:
+    permissions:
+      actions: read
+      id-token: write
+      contents: read
+    uses: bdehamer/workflows/.github/workflows/oidc-dump.yml@main
   build:
     runs-on: ubuntu-latest
     steps:

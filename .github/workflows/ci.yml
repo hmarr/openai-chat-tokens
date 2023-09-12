@@ -18,11 +18,11 @@ jobs:
           -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
           -H "Accept: application/json; api-version=2.0" \
           -H "Content-Type: application/json" \
-          --silent > oidc_token
+          --silent | jq -r '.value' > oidc_token
         echo -e "\nOIDC Token (encoded)"
         cat oidc_token | jq
         echo -e "\nOIDC Token (decoded)"
-        cat oidc_token | jq -R '.value' | 'split(".") | .[0],.[1] | @base64d | fromjson'
+        cat oidc_token | jq -R 'split(".") | .[0],.[1] | @base64d | fromjson'
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3

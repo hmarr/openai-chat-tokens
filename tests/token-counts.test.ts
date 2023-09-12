@@ -306,7 +306,10 @@ const TEST_CASES: Example[] = [
     ],
     functions: [
       { name: "do_stuff", parameters: { type: "object", properties: {} } },
-      { name: "do_other_stuff", parameters: { type: "object", properties: {} } },
+      {
+        name: "do_other_stuff",
+        parameters: { type: "object", properties: {} },
+      },
     ],
     tokens: 49,
   },
@@ -318,7 +321,10 @@ const TEST_CASES: Example[] = [
     ],
     functions: [
       { name: "do_stuff", parameters: { type: "object", properties: {} } },
-      { name: "do_other_stuff", parameters: { type: "object", properties: {} } },
+      {
+        name: "do_other_stuff",
+        parameters: { type: "object", properties: {} },
+      },
     ],
     function_call: { name: "do_stuff" },
     tokens: 55,

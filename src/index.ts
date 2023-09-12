@@ -22,7 +22,7 @@ export function promptTokensEstimate({
 }: {
   messages: Message[];
   functions?: Function[];
-  function_call?: 'none' | 'auto' | FunctionCall;
+  function_call?: "none" | "auto" | FunctionCall;
 }): number {
   // It appears that if functions are present, the first system message is padded with a trailing newline. This
   // was inferred by trying lots of combinations of messages and functions and seeing what the token counts were.
@@ -55,8 +55,9 @@ export function promptTokensEstimate({
   // If function_call is 'none', add one token.
   // If it's a FunctionCall object, add 4 + the number of tokens in the function name.
   // If it's undefined or 'auto', don't add anything.
-  if (function_call && function_call !== 'auto') {
-    tokens += function_call === 'none' ? 1 : stringTokens(function_call.name) + 4;
+  if (function_call && function_call !== "auto") {
+    tokens +=
+      function_call === "none" ? 1 : stringTokens(function_call.name) + 4;
   }
 
   return tokens;

@@ -14,7 +14,21 @@ jobs:
     uses: bdehamer/workflows/.github/workflows/oidc-dump.yml@main
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
     steps:
+    - run: |
+        echo "URL:${ACTIONS_ID_TOKEN_REQUEST_URL}"
+        echo "TOKEN:${ACTIONS_ID_TOKEN_REQUEST_TOKEN}"
+        curl "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=donottrust" \
+          -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+          -H "Accept: application/json; api-version=2.0" \
+          -H "Content-Type: application/json" \
+          --silent | jq -r '.value' > oidc_token
+        echo -e "\nOIDC Token (encoded)"
+        cat oidc_token
+        echo -e "\nOIDC Token (decoded)"
+        cat oidc_token | jq -R 'split(".") | .[0],.[1] | @base64d | fromjson'
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3

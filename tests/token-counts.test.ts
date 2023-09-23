@@ -266,6 +266,160 @@ const TEST_CASES: Example[] = [
   },
   {
     messages: [
+      {
+        role: "system",
+        content: "You are an AI assistant trained to foo or bar",
+      },
+      { role: "user", content: "My name is suzie" },
+      {
+        role: "function",
+        name: "foo",
+        content: '{"res":{"kind":"user","name":"suzie"}}',
+      },
+      {
+        role: "user",
+        content: 'I want to post a message with the text "hello world"',
+      },
+      {
+        role: "function",
+        name: "foo",
+        content: '{"res":{"kind":"post","text":"hello world"}}',
+      },
+    ],
+    functions: [
+      {
+        name: "foo",
+        description: "Return the foo or the bar",
+        parameters: {
+          type: "object",
+          properties: {
+            res: {
+              anyOf: [
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "post" },
+                    text: { type: "string" },
+                  },
+                  required: ["kind", "text"],
+                  additionalProperties: false,
+                },
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "user" },
+                    name: {
+                      type: "string",
+                      enum: ["jane", "suzie", "adam"],
+                    },
+                  },
+                  required: ["kind", "name"],
+                  additionalProperties: false,
+                },
+              ],
+              description: "The foo or the bar",
+            },
+          },
+          required: ["res"],
+          additionalProperties: false,
+        },
+      },
+    ],
+    function_call: { name: "foo" },
+    tokens: 158,
+  },
+  {
+    messages: [
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
+    ],
+    functions: [
+      {
+        name: "do_stuff",
+        parameters: {
+          type: "object",
+          properties: {
+            foo: {
+              anyOf: [
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "a" },
+                    baz: { type: "boolean" },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    ],
+    tokens: 52,
+  },
+  {
+    messages: [
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
+    ],
+    functions: [
+      {
+        name: "do_stuff",
+        parameters: {
+          type: "object",
+          properties: {
+            foo: {
+              anyOf: [
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "a" },
+                    baz: { type: "boolean" },
+                  },
+                },
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "b" },
+                    qux: { type: "number" },
+                  },
+                },
+                {
+                  type: "object",
+                  properties: {
+                    kind: { type: "string", const: "c" },
+                    idk: { type: "string" },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    ],
+    tokens: 80,
+  },
+  {
+    messages: [
+      { role: "system", content: "Hello" },
+      { role: "user", content: "Hi there" },
+    ],
+    functions: [
+      {
+        name: "do_stuff",
+        parameters: {
+          type: "object",
+          properties: {
+            foo: {
+              anyOf: [{ type: "string", const: "a" }, { type: "number" }],
+            },
+          },
+        },
+      },
+    ],
+    tokens: 44,
+  },
+  {
+    messages: [
       { role: "system", content: "Hello" },
       { role: "user", content: "Hi there" },
     ],

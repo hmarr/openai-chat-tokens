@@ -2,9 +2,9 @@ import OpenAI from "openai";
 import { Tiktoken, getEncoding } from "js-tiktoken";
 import { FunctionDef, formatFunctionDefinitions } from "./functions";
 
-type Message = OpenAI.Chat.CreateChatCompletionRequestMessage;
-type Function = OpenAI.Chat.CompletionCreateParams.Function;
-type FunctionCall = OpenAI.Chat.CompletionCreateParams.FunctionCallOption;
+type Message = OpenAI.Chat.ChatCompletionMessageParam;
+type Function = OpenAI.Chat.ChatCompletionCreateParams.Function;
+type FunctionCall = OpenAI.Chat.ChatCompletionCreateParams.FunctionCallOption;
 
 let encoder: Tiktoken | undefined;
 

@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 
-type OpenAIFunction = OpenAI.Chat.CompletionCreateParams.Function;
+type OpenAIFunction = OpenAI.Chat.ChatCompletionCreateParams.Function;
 
 // Types representing the OpenAI function definitions. While the OpenAI client library
 // does have types for function definitions, the properties are just Record<string, unknown>,

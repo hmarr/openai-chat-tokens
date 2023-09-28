@@ -1,9 +1,9 @@
 import OpenAI from "openai";
 import { promptTokensEstimate } from "../src";
 
-type Message = OpenAI.Chat.CreateChatCompletionRequestMessage;
-type Function = OpenAI.Chat.CompletionCreateParams.Function;
-type FunctionCall = OpenAI.Chat.CompletionCreateParams.FunctionCallOption;
+type Message = OpenAI.Chat.ChatCompletionMessageParam;
+type Function = OpenAI.Chat.ChatCompletionCreateParams.Function;
+type FunctionCall = OpenAI.Chat.ChatCompletionCreateParams.FunctionCallOption;
 type Example = {
   messages: Message[];
   functions?: Function[];

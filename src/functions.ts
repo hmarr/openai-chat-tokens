@@ -19,9 +19,14 @@ interface ObjectProp {
   required?: string[];
 }
 
+interface AnyOfProp {
+  anyOf: Prop[];
+}
+
 type Prop = {
   description?: string;
 } & (
+  | AnyOfProp
   | ObjectProp
   | {
       type: "string";
@@ -40,6 +45,13 @@ type Prop = {
       items?: Prop;
     }
 );
+
+function isAnyOfProp(prop: Prop): prop is AnyOfProp {
+  return (
+    (prop as AnyOfProp).anyOf !== undefined &&
+    Array.isArray((prop as AnyOfProp).anyOf)
+  );
+}
 
 // When OpenAI use functions in the prompt, they format them as TypeScript definitions rather than OpenAPI JSON schemas.
 // This function converts the JSON schemas into TypeScript definitions.
@@ -80,6 +92,9 @@ function formatObjectProperties(obj: ObjectProp, indent: number): string {
 
 // Format a single property type
 function formatType(param: Prop, indent: number): string {
+  if (isAnyOfProp(param)) {
+    return param.anyOf.map((v) => formatType(v, indent)).join(" | ");
+  }
   switch (param.type) {
     case "string":
       if (param.enum) {

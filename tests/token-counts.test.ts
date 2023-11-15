@@ -1,9 +1,21 @@
 import OpenAI from "openai";
 import { promptTokensEstimate } from "../src";
 
+// There's a bug in the openai types that prevents us from adding the name field to the system message
+// ref: https://github.com/openai/openai-openapi/issues/118
+// ref: https://github.com/openai/openai-node/pull/493
+// TODO: remove when this is fixed
+declare module "openai" {
+  namespace OpenAI.Chat {
+    interface ChatCompletionSystemMessageParam {
+      name?: string;
+    }
+  }
+}
+
 type Message = OpenAI.Chat.ChatCompletionMessageParam;
 type Function = OpenAI.Chat.ChatCompletionCreateParams.Function;
-type FunctionCall = OpenAI.Chat.ChatCompletionCreateParams.FunctionCallOption;
+type FunctionCall = OpenAI.Chat.ChatCompletionFunctionCallOption;
 type Example = {
   messages: Message[];
   functions?: Function[];

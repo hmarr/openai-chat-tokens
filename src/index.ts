@@ -4,7 +4,7 @@ import { FunctionDef, formatFunctionDefinitions } from "./functions";
 
 type Message = OpenAI.Chat.ChatCompletionMessageParam;
 type Function = OpenAI.Chat.ChatCompletionCreateParams.Function;
-type FunctionCall = OpenAI.Chat.ChatCompletionCreateParams.FunctionCallOption;
+type FunctionCall = OpenAI.Chat.ChatCompletionFunctionCallOption;
 
 let encoder: Tiktoken | undefined;
 
@@ -82,22 +82,29 @@ export function stringTokens(s: string): number {
  * @returns An estimate for the number of tokens the message will use
  */
 export function messageTokensEstimate(message: Message): number {
-  const components = [
-    message.role,
-    message.content,
-    message.name,
-    message.function_call?.name,
-    message.function_call?.arguments,
-  ].filter((v): v is string => !!v);
+  const components: string[] = [message.role];
+  if (typeof message.content === "string") {
+    components.push(message.content);
+  }
+
+  if ("name" in message && message.name) {
+    components.push(message.name);
+  }
+
+  if (message.role === "assistant" && message.function_call) {
+    components.push(message.function_call.name);
+    components.push(message.function_call.arguments);
+  }
+
   let tokens = components.map(stringTokens).reduce((a, b) => a + b, 0);
   tokens += 3; // Add three per message
-  if (message.name) {
+  if ("name" in message && message.name) {
     tokens += 1;
   }
   if (message.role === "function") {
     tokens -= 2;
   }
-  if (message.function_call) {
+  if (message.role === "assistant" && message.function_call) {
     tokens += 3;
   }
   return tokens;

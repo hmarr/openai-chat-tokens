@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { describe, test } from "vitest";
 import { promptTokensEstimate } from "../src";
 
 // There's a bug in the openai types that prevents us from adding the name field to the system message
@@ -620,7 +621,7 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = validateAll || example.validate ? test : test.skip;
   validateTest(
     "test data matches openai",
-    async () => {
+    async ({ expect }) => {
       const openai = new OpenAI();
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -634,7 +635,7 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
     openAITimeout,
   );
 
-  test("estimate is correct", async () => {
+  test("estimate is correct", async ({ expect }) => {
     expect(
       promptTokensEstimate({
         messages: example.messages,

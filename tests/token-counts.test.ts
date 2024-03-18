@@ -623,6 +623,7 @@ const openAITimeout = 10000;
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = validateAll || example.validate ? test : test.skip;
+
   validateTest(
     "test data matches openai",
     async ({ expect }) => {
@@ -634,18 +635,19 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
         function_call: example.function_call,
         max_tokens: 10,
       });
+
       expect(response.usage?.prompt_tokens).toBe(example.tokens);
     },
     openAITimeout,
   );
 
   test("estimate is correct", async ({ expect }) => {
-    expect(
-      promptTokensEstimate({
-        messages: example.messages,
-        functions: example.functions,
-        function_call: example.function_call,
-      }),
-    ).toBe(example.tokens);
+    const estimate = promptTokensEstimate({
+      messages: example.messages,
+      functions: example.functions,
+      function_call: example.function_call,
+    });
+
+    expect(estimate).toBe(example.tokens);
   });
 });

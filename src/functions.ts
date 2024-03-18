@@ -2,16 +2,17 @@ import OpenAI from "openai";
 
 type OpenAIFunction = OpenAI.Chat.ChatCompletionCreateParams.Function;
 
-// Types representing the OpenAI function definitions. While the OpenAI client library
-// does have types for function definitions, the properties are just Record<string, unknown>,
-// which isn't very useful for type checking this formatting code.
+/** Types representing the OpenAI function definitions. While the OpenAI client
+ * library does have types for function definitions, the properties are just
+ * Record<string, unknown>, which isn't very useful for type checking this
+ * formatting code. */
 export interface FunctionDef extends Omit<OpenAIFunction, "parameters"> {
   name: string;
   description?: string;
   parameters: ObjectProp;
 }
 
-interface ObjectProp {
+export interface ObjectProp {
   type: "object";
   properties?: {
     [key: string]: Prop;
@@ -19,11 +20,11 @@ interface ObjectProp {
   required?: string[];
 }
 
-interface AnyOfProp {
+export interface AnyOfProp {
   anyOf: Prop[];
 }
 
-type Prop = {
+export type Prop = {
   description?: string;
 } & (
   | AnyOfProp
@@ -46,15 +47,16 @@ type Prop = {
     }
 );
 
-function isAnyOfProp(prop: Prop): prop is AnyOfProp {
+export function isAnyOfProp(prop: Prop): prop is AnyOfProp {
   return (
     (prop as AnyOfProp).anyOf !== undefined &&
     Array.isArray((prop as AnyOfProp).anyOf)
   );
 }
 
-// When OpenAI use functions in the prompt, they format them as TypeScript definitions rather than OpenAPI JSON schemas.
-// This function converts the JSON schemas into TypeScript definitions.
+/** When OpenAI use functions in the prompt, they format them as TypeScript
+ * definitions rather than OpenAPI JSON schemas. This function converts the JSON
+ * schemas into TypeScript definitions. */
 export function formatFunctionDefinitions(functions: FunctionDef[]) {
   const lines = ["namespace functions {", ""];
   for (const f of functions) {
@@ -74,8 +76,12 @@ export function formatFunctionDefinitions(functions: FunctionDef[]) {
   return lines.join("\n");
 }
 
-// Format just the properties of an object (not including the surrounding braces)
-function formatObjectProperties(obj: ObjectProp, indent: number): string {
+/** Format just the properties of an object (not including the surrounding
+ * braces) */
+export function formatObjectProperties(
+  obj: ObjectProp,
+  indent: number,
+): string {
   const lines = [];
   for (const [name, param] of Object.entries(obj.properties ?? {})) {
     if (param.description && indent < 2) {
@@ -90,8 +96,8 @@ function formatObjectProperties(obj: ObjectProp, indent: number): string {
   return lines.map((line) => " ".repeat(indent) + line).join("\n");
 }
 
-// Format a single property type
-function formatType(param: Prop, indent: number): string {
+/** Format a single property type */
+export function formatType(param: Prop, indent: number): string {
   if (isAnyOfProp(param)) {
     return param.anyOf.map((v) => formatType(v, indent)).join(" | ");
   }

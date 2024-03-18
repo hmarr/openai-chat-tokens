@@ -36,5 +36,12 @@
   },
   "prettier": {
     "trailingComma": "all"
-  }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "type": "module"
 }

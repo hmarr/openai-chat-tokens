@@ -1,6 +1,10 @@
 import OpenAI from "openai";
+import { loadEnv } from "vite";
 import { describe, test } from "vitest";
 import { promptTokensEstimate } from "../src";
+
+const mode = process.env["NODE_ENV"] ?? "development";
+Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
 
 // There's a bug in the openai types that prevents us from adding the name field to the system message
 // ref: https://github.com/openai/openai-openapi/issues/118

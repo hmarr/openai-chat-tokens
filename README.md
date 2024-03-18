@@ -40,11 +40,11 @@ const estimate = promptTokensEstimate({
 
 ## Development and testing
 
-Built in TypeScript, tested with Jest.
+Built in TypeScript, tested with Vitest.
 
-```bash
-$ npm install
-$ npm test
+```sh
+npm install
+npm test
 ```
 
 When adding new test cases or debugging token count mismatches, it can be helpful to validate the estimated tokens in the tests against the live OpenAI API. To do this:

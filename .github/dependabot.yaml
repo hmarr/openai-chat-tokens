@@ -1,0 +1,45 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "
+    groups:
+      patch-development:
+        dependency-type: development
+        update-types:
+          - patch
+      patch-production:
+        dependency-type: production
+        update-types:
+          - patch
+
+      eslint:
+        patterns:
+          - "*eslint*"
+      prettier:
+        patterns:
+          - "*prettier*"
+      openai:
+        patterns:
+          - "*openai*"
+          - "*tiktoken*"
+      vite:
+        patterns:
+          - vite
+          - vitest
+      typescript:
+        patterns:
+          - "*typescript*"
+          - tslib
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: America/Toronto
+    commit-message:
+      prefix: "⬆️ "

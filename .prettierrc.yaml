@@ -1,0 +1,4 @@
+arrowParens: avoid
+semi: false
+trailingComma: all
+useTabs: true

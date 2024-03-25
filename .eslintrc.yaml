@@ -1,0 +1,43 @@
+root: true
+env:
+  browser: true
+  es2021: true
+  node: true
+extends:
+  - plugin:@typescript-eslint/strict-type-checked
+  - plugin:@typescript-eslint/stylistic-type-checked
+  - prettier
+parser: "@typescript-eslint/parser"
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+  project: "./tsconfig.eslint.json"
+plugins:
+  - "@typescript-eslint"
+rules:
+  "@typescript-eslint/class-methods-use-this": error
+  "@typescript-eslint/consistent-type-exports": error
+  "@typescript-eslint/consistent-type-imports": error
+  "@typescript-eslint/default-param-last": error
+  "@typescript-eslint/explicit-member-accessibility":
+    - error
+    - accessibility: no-public
+  "@typescript-eslint/method-signature-style": error
+  "@typescript-eslint/no-import-type-side-effects": error
+  "@typescript-eslint/no-unnecessary-qualifier": error
+  "@typescript-eslint/no-useless-empty-export": error
+  "@typescript-eslint/prefer-nullish-coalescing":
+    - error
+    - ignorePrimitives: true
+  "@typescript-eslint/prefer-readonly": error
+  "@typescript-eslint/prefer-regexp-exec": error
+  "@typescript-eslint/promise-function-async":
+    - error
+    - checkArrowFunctions: false
+  "@typescript-eslint/require-array-sort-compare": error
+  "@typescript-eslint/return-await": error
+  "@typescript-eslint/sort-type-constituents": error
+
+  func-style:
+    - error
+    - declaration

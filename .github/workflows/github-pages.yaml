@@ -1,0 +1,41 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: main
+
+jobs:
+  build_pages:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 21
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run docs
+      - uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+
+  deploy_pages:
+    needs: build_pages
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v1

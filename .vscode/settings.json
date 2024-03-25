@@ -1,0 +1,9 @@
+{
+	"[github-actions-workflow][javascript][json][jsonc][typescript][xml][yaml]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.minimap.maxColumn": 80,
+		"editor.rulers": [80]
+	},
+	"editor.formatOnSave": true,
+	"git.enableCommitSigning": true
+}

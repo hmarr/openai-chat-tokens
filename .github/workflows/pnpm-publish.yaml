@@ -1,0 +1,55 @@
+name: Node.js Publish
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      id-token: write
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          node-version: 21
+      - run: pnpm install
+      - run: pnpm build
+
+      - uses: actions/setup-node@v4
+        with:
+          registry-url: https://npm.pkg.github.com
+          scope: "@coderabbitai"
+      - run: pnpm publish --access public --no-git-checks --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          registry-url: https://registry.npmjs.org
+          scope: "@coderabbitai"
+      - run: pnpm publish --access public --no-git-checks --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.CODERABBIT_NPMTOKEN }}
+
+      - run: pnpm pack --pack-gzip-level 9
+      - name: Sign
+        run: |
+          eval `ssh-agent -s`
+          ssh-add - <<< '${{ secrets.DEPLOY_KEY_PRIVATE }}'
+          echo '${{ vars.DEPLOY_KEY_PUBLIC }}' > '${{ runner.temp }}/DEPLOY_KEY_PUBLIC.pub'
+          ssh-keygen -Y sign -f '${{ runner.temp }}/DEPLOY_KEY_PUBLIC.pub' -n file coderabbitai-openai-chat-tokens-*.tgz
+          ssh-keygen -Y verify -f ./.github/authorized_keys -I '41898282+github-actions[bot]@users.noreply.github.com' -n file -s coderabbitai-openai-chat-tokens-*.tgz.sig < coderabbitai-openai-chat-tokens-*.tgz
+      - run: gh release upload ${{ github.ref_name }} coderabbitai-openai-chat-tokens-*.tgz coderabbitai-openai-chat-tokens-*.tgz.sig
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

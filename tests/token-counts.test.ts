@@ -1,5 +1,10 @@
 import OpenAI from "openai";
+import { loadEnv } from "vite";
+import { describe, test } from "vitest";
 import { promptTokensEstimate } from "../src";
+
+const mode = process.env["NODE_ENV"] ?? "development";
+Object.assign(process.env, loadEnv(mode, process.cwd(), ""));
 
 // There's a bug in the openai types that prevents us from adding the name field to the system message
 // ref: https://github.com/openai/openai-openapi/issues/118
@@ -618,9 +623,10 @@ const openAITimeout = 10000;
 
 describe.each(TEST_CASES)("token counts (%j)", (example) => {
   const validateTest = validateAll || example.validate ? test : test.skip;
+
   validateTest(
     "test data matches openai",
-    async () => {
+    async ({ expect }) => {
       const openai = new OpenAI();
       const response = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
@@ -629,18 +635,19 @@ describe.each(TEST_CASES)("token counts (%j)", (example) => {
         function_call: example.function_call,
         max_tokens: 10,
       });
+
       expect(response.usage?.prompt_tokens).toBe(example.tokens);
     },
     openAITimeout,
   );
 
-  test("estimate is correct", async () => {
-    expect(
-      promptTokensEstimate({
-        messages: example.messages,
-        functions: example.functions,
-        function_call: example.function_call,
-      }),
-    ).toBe(example.tokens);
+  test("estimate is correct", async ({ expect }) => {
+    const estimate = promptTokensEstimate({
+      messages: example.messages,
+      functions: example.functions,
+      function_call: example.function_call,
+    });
+
+    expect(estimate).toBe(example.tokens);
   });
 });

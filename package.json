@@ -1,6 +1,6 @@
 {
 	"name": "@coderabbitai/openai-chat-tokens",
-	"version": "0.0.0",
+	"version": "0.1.0",
 	"description": "Estimate the number of tokens an OpenAI chat completion request will use",
 	"homepage": "https://github.com/coderabbitai/openai-chat-tokens",
 	"bugs": {
